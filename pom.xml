@@ -12,7 +12,7 @@
     <name>lottery-app</name>
     <description>Lottery App in Spring Boot</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
