@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽選アプリ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 98%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            min-height: 150px;
+            resize: vertical;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .winners-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .winners-section h2 {
+            color: #28a745;
+            text-align: center;
+        }
+        .winners-list {
+            list-style: none;
+            padding: 0;
+        }
+        .winners-list li {
+            background-color: #e9f7ef;
+            border: 1px solid #d4edda;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>抽選アプリ</h1>
+
+        <form th:action="@{/draw}" th:object="${lotteryRequest}" method="post">
+            <div>
+                <label for="participantsText">参加者リスト（1行に1人、またはカンマ区切りで入力）</label>
+                <textarea id="participantsText" th:field="*{participantsText}" rows="10" placeholder="例:&#10;田中 太郎&#10;佐藤 花子&#10;山田 健太&#10;..."></textarea>
+                <div class="note">※改行区切りで入力してください。</div>
+            </div>
+            <div>
+                <label for="numberOfWinners">抽選人数</label>
+                <input type="number" id="numberOfWinners" th:field="*{numberOfWinners}" min="1" value="1" required>
+            </div>
+            <button type="submit">抽選開始</button>
+        </form>
+
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(winners)}" class="winners-section">
+            <h2>抽選結果</h2>
+            <ul class="winners-list">
+                <li th:each="winner : ${winners}" th:text="${winner}"></li>
+            </ul>
+        </div>
+        <div th:if="${#lists.isEmpty(winners) and errorMessage == null and lotteryRequest.participantsText != null}">
+             <p class="note">抽選結果はここに表示されます。</p>
+        </div>
+    </div>
+</body>
+</html>
