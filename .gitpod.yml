@@ -1,0 +1,16 @@
+# この設定ファイルは、Gitpodが新しいワークスペースを作成する際に読み込まれます。
+# 特定のJavaバージョンを使用し、起動時にコマンドを実行するようにGitpodに指示します。
+
+# 公式のGitpod Java 17イメージを使用します
+image: gitpod/workspace-java-17
+
+# ワークスペース起動時に実行するタスク
+tasks:
+  - name: Build and Run Spring Boot App
+    init: |
+      # Mavenの依存関係をクリーンアップしてインストールします
+      # -DskipTests はテストの実行をスキップし、初回ビルドを高速化します
+      mvn clean install -DskipTests
+    command: |
+      # Spring Bootアプリケーションを実行します
+      mvn spring-boot:run
